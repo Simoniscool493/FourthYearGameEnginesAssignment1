@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class TankController : MonoBehaviour {
 
+    public AudioSource blasterSound;
+
+    public GameObject laser;
     public GameObject target;
     public bool heroTag;
+    public bool enemyTag;
+    public bool shooting = false;
     
 	// Use this for initialization
 	void Start ()
     {
         this.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, maxMovementSpeed);
+
 	}
 
-    float maxMovementSpeed = 100;
+    public float maxMovementSpeed = 100;
     float fleeDistance = 15.0f;
     float seekDistance = 15.0f;
 
@@ -36,6 +42,18 @@ public class TankController : MonoBehaviour {
 
         totalForce = AdjustForceForDesiredVelocity(totalForce);
         transform.GetComponent<Rigidbody>().AddForce(totalForce);
+
+        if(enemyTag && shooting && Random.Range(0, 100)==51)
+        {
+            var newLaser = Instantiate(laser, transform.position + new Vector3(0.3f, 1f, 1), Quaternion.Euler(90,0,0));
+            var newLaser2 = Instantiate(laser, transform.position + new Vector3(-0.3f, 1f, 1), Quaternion.Euler(90, 0, 0));
+
+            newLaser.GetComponent<LaserController>().laserActive = true;
+            newLaser2.GetComponent<LaserController>().laserActive = true;
+            blasterSound.Play();
+        }
+
+        //Debug.DrawRay(transform.position, transform.position + new Vector3(0,0,10), Color.yellow);
     }
 
     Vector3 AdjustForceForDesiredVelocity(Vector3 forcePreAdjusting)
@@ -85,7 +103,7 @@ public class TankController : MonoBehaviour {
 
         if(!heroTag)
         {
-            foreach (var go in GameObject.FindGameObjectsWithTag("XWing"))
+            foreach (var go in GameObject.FindGameObjectsWithTag("Ship"))
             {
                 var theTarget = go;
 

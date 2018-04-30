@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class JumpToNextSectionScript : MonoBehaviour {
 
+    public bool Active = false;
 	// Use this for initialization
 	void Start () {
 		
@@ -12,18 +13,32 @@ public class JumpToNextSectionScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        if (transform.position.z > 170)
+        if(Active)
         {
-            foreach(var go in GameObject.FindGameObjectsWithTag("XWing"))
+            if (transform.position.z > 170)
             {
-                go.transform.position += new Vector3(0, 0, -245);
+                foreach (var go in GameObject.FindGameObjectsWithTag("Ship"))
+                {
+                    go.transform.position += new Vector3(0, 0, -245);
+                }
+
+                foreach (var go in GameObject.FindGameObjectsWithTag("Laser"))
+                {
+                    go.transform.position += new Vector3(0, 0, -245);
+                }
+
             }
-        }
-        else if (transform.position.z < -78)
-        {
-            foreach (var go in GameObject.FindGameObjectsWithTag("XWing"))
+            else if (transform.position.z < -78)
             {
-                transform.position += new Vector3(0, 0, 245);
+                foreach (var go in GameObject.FindGameObjectsWithTag("Ship"))
+                {
+                    transform.position += new Vector3(0, 0, 245);
+                }
+
+                foreach (var go in GameObject.FindGameObjectsWithTag("Laser"))
+                {
+                    transform.position += new Vector3(0, 0, 245);
+                }
             }
         }
     }
